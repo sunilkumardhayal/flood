@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Integrated Urban Flood Management Model</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            display: block;
+            margin-top: 5px;
+            right: 0;
+            background: #1d4ed8;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover:after {
+            width: 100%;
+            left: 0;
+        }
+        .phase-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .phase-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        .map-grid-cell {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .map-grid-cell.highlight:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid #fbbf24;
+            border-radius: 0.25rem;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        /* Modal styles */
+        .modal-backdrop {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+        /* External link style */
+        .external-link {
+            color: #2563eb;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            font-weight: 500;
+            transition: color 0.2s ease-in-out;
+        }
+        .external-link:hover {
+            color: #1d4ed8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-md">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-xl font-bold text-blue-800">IUFM Model v2.0</a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#overview" class="nav-link text-slate-600 hover:text-blue-800 font-medium">Overview</a>
+                <a href="#phases" class="nav-link text-slate-600 hover:text-blue-800 font-medium">Phases</a>
+                <a href="#simulation" class="nav-link text-slate-600 hover:text-blue-800 font-medium">Simulation</a>
+                <a href="#technologies" class="nav-link text-slate-600 hover:text-blue-800 font-medium">Technologies</a>
+                <a href="#plan" class="nav-link text-slate-600 hover:text-blue-800 font-medium">Implementation</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#overview" class="block py-2 text-slate-600 hover:text-blue-800">Overview</a>
+            <a href="#phases" class="block py-2 text-slate-600 hover:text-blue-800">Phases</a>
+            <a href="#simulation" class="block py-2 text-slate-600 hover:text-blue-800">Simulation</a>
+            <a href="#technologies" class="block py-2 text-slate-600 hover:text-blue-800">Technologies</a>
+            <a href="#plan" class="block py-2 text-slate-600 hover:text-blue-800">Implementation</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <!-- Overview Section -->
+        <section id="overview" class="text-center mb-24">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">Integrated Urban Flood Management Model</h1>
+            <p class="text-lg text-slate-600 max-w-3xl mx-auto mb-6">A proactive, cyclical framework to build flood-resilient cities by integrating policy, technology, and community action.</p>
+            <div class="bg-white p-6 rounded-2xl shadow-lg inline-block">
+                <p class="text-2xl font-mono text-blue-800">Risk = f(Hazard, Vulnerability, Exposure)</p>
+            </div>
+        </section>
+
+        <!-- Phases Section -->
+        <section id="phases" class="mb-24">
+            <h2 class="text-3xl font-bold text-center mb-12 text-slate-900">The Four-Phase Cycle</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                 <!-- Cards remain the same -->
+                <div class="phase-card bg-white p-8 rounded-2xl shadow-lg border-t-4 border-slate-500">
+                    <div class="text-3xl font-bold text-slate-500 mb-4">0</div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-800">Foundational Framework</h3>
+                    <p class="text-slate-600">Establishing the bedrock of data, governance, and finance for effective flood management.</p>
+                </div>
+                <div class="phase-card bg-white p-8 rounded-2xl shadow-lg border-t-4 border-green-500">
+                    <div class="text-3xl font-bold text-green-500 mb-4">1</div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-800">Mitigation</h3>
+                    <p class="text-slate-600">Long-term structural and nature-based solutions to reduce flood likelihood and impact.</p>
+                </div>
+                <div class="phase-card bg-white p-8 rounded-2xl shadow-lg border-t-4 border-yellow-500">
+                    <div class="text-3xl font-bold text-yellow-500 mb-4">2</div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-800">Preparedness</h3>
+                    <p class="text-slate-600">Ensuring the city is ready to respond with early warning systems and emergency plans.</p>
+                </div>
+                <div class="phase-card bg-white p-8 rounded-2xl shadow-lg border-t-4 border-red-500">
+                    <div class="text-3xl font-bold text-red-500 mb-4">3 & 4</div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-800">Response & Recovery</h3>
+                    <p class="text-slate-600">Coordinated action during a flood and building back better for future resilience.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Simulation Section -->
+        <section id="simulation" class="mb-24">
+            <h2 class="text-3xl font-bold text-center mb-4 text-slate-900">Interactive Mitigation Simulation</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-8">Click on map cells to choose a mitigation strategy. Each has a different cost and impact. Protect critical infrastructure and residential zones, then simulate a flood to see the results.</p>
+            
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-2xl">
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="flex-grow">
+                        <div id="map-container" class="grid grid-cols-10 gap-1 bg-slate-200 rounded-lg p-2 aspect-square"></div>
+                    </div>
+                    <div class="w-full lg:w-80 flex-shrink-0">
+                        <h3 class="text-xl font-bold mb-4">Controls</h3>
+                        <div class="space-y-4">
+                            <button id="simulate-flood-btn" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors shadow-md flex items-center justify-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.2 15c.7-1.2 1-2.5.7-3.9-.6-2.4-3.4-4-6.2-4.2-1.5-.1-2.9.3-4.2 1-1.3.7-2.4 1.7-3.2 2.9-1.3 2.2-1.1 5.1.6 7.1-2.1.5-4.2 1.8-5.3 3.8-.9 1.6-.8 3.5.3 5.1s2.9 2.7 4.9 2.7h13.2c1.7 0 3.2-.9 4.1-2.3s.9-3.2.1-4.8c-.8-1.4-2-2.4-3.5-2.9Z"/><path d="M11 12.5a2.5 2.5 0 0 1-5 0 2.5 2.5 0 0 1 5 0Z"/><path d="M17 12.5a2.5 2.5 0 0 1-5 0 2.5 2.5 0 0 1 5 0Z"/><path d="M14 20a2.5 2.5 0 0 1-5 0 2.5 2.5 0 0 1 5 0Z"/></svg>
+                                Simulate Heavy Rainfall
+                            </button>
+                            <button id="reset-map-btn" class="w-full bg-slate-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-slate-700 transition-colors shadow-md flex items-center justify-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M21 21v-5h-5"/></svg>
+                                Reset Simulation
+                            </button>
+                        </div>
+
+                        <h3 class="text-xl font-bold mt-8 mb-4">Legend</h3>
+                        <div id="legend"></div>
+
+                        <h3 class="text-xl font-bold mt-8 mb-4">Statistics</h3>
+                        <div class="bg-slate-100 p-4 rounded-lg space-y-3 text-sm">
+                             <div><strong>Flood Risk Index:</strong> <span id="flood-risk-stat" class="font-mono text-blue-700 font-bold">0</span></div>
+                             <div><strong>Mitigation Cost:</strong> <span id="mitigation-cost-stat" class="font-mono text-green-700 font-bold">$0M</span></div>
+                             <div><strong>Cells Mitigated:</strong> <span id="mitigated-cells-stat" class="font-mono text-yellow-700 font-bold">0 / 100</span></div>
+                             <div><strong>Damage Cost (Post-Flood):</strong> <span id="damage-cost-stat" class="font-mono text-red-700 font-bold">$0M</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Technologies Section -->
+        <section id="technologies" class="mb-24">
+            <h2 class="text-3xl font-bold text-center mb-12 text-slate-900">Key Technologies</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-2xl shadow-lg">
+                    <h3 class="text-xl font-bold mb-3 text-blue-700">GIS & LiDAR</h3>
+                    <p class="text-slate-600">
+                        <a href="https://science.nasa.gov/gis/" target="_blank" rel="noopener noreferrer" class="external-link">GIS</a> and 
+                        <a href="https://oceanservice.noaa.gov/facts/lidar.html" target="_blank" rel="noopener noreferrer" class="external-link">LiDAR</a> create high-precision 3D maps of the urban landscape, identifying natural drainage paths and low-lying vulnerable areas.
+                    </p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg">
+                    <h3 class="text-xl font-bold mb-3 text-blue-700">IoT Sensor Network</h3>
+                    <p class="text-slate-600">
+                        A network of real-time <a href="https://www.nasa.gov/directorates/stmd/game-changing-development-program/project-highlights/cognitive-communication/iot-for-aerospace/" target="_blank" rel="noopener noreferrer" class="external-link">IoT</a> sensors for rainfall, river levels, and drain capacity provides live data to the central system, enabling immediate detection of potential flood conditions.
+                    </p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg">
+                    <h3 class="text-xl font-bold mb-3 text-blue-700">AI Predictive Modeling</h3>
+                    <p class="text-slate-600">
+                        <a href="https://www.ai.gov/" target="_blank" rel="noopener noreferrer" class="external-link">Artificial Intelligence</a> and Machine Learning algorithms process historical and real-time data to run simulations, predict flood-affected areas, and provide accurate early warnings.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Implementation Plan Section -->
+        <section id="plan" class="mb-12">
+            <h2 class="text-3xl font-bold text-center mb-12 text-slate-900">Detailed Implementation Plan</h2>
+            <div class="space-y-8">
+                <div class="bg-white p-8 rounded-2xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-4">Phase 1: Foundation & Quick Wins (Year 1-2)</h3>
+                    <ul class="list-disc list-inside space-y-3 text-slate-600">
+                        <li><strong>Governance:</strong> Establish Unified Flood Management Authority (UFMA) with legal powers to coordinate across municipal departments. Secure initial funding.</li>
+                        <li><strong>Data:</strong> Procure LiDAR data and create baseline GIS maps of topography, drainage network, and critical infrastructure. Identify the top 50 vulnerability hotspots.</li>
+                        <li><strong>Infrastructure:</strong> Launch a high-visibility, city-wide drain de-silting program, targeting clogged primary drains identified in the mapping phase.</li>
+                        <li><strong>Community:</strong> Start multi-lingual public awareness campaigns (social media, radio) on flood risks and household-level preparedness.</li>
+                        <li><strong>Policy:</strong> Draft <a href="https://www.epa.gov/green-infrastructure/what-green-infrastructure" target="_blank" rel="noopener noreferrer" class="external-link">"Sponge City"</a> guidelines and implement pilot projects for permeable pavements in 3-5 new public parking lots.</li>
+                        <li><strong>Technology:</strong> Develop and test a basic SMS-based Early Warning System (EWS) for the 50 identified hotspots.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-4">Phase 2: Scaling Up (Year 3-5)</h3>
+                    <ul class="list-disc list-inside space-y-3 text-slate-600">
+                        <li><strong>Policy:</strong> Mandate "Sponge City" policies for all new constructions over 20,000 sq. ft. Introduce tax incentives for green retrofitting.</li>
+                        <li><strong>Infrastructure:</strong> Begin ecological restoration of two major urban water bodies. Start augmenting drain capacity in critical zones.</li>
+                        <li><strong>Technology:</strong> Deploy a city-wide network of 200+ IoT rain gauges and water level sensors. Upgrade EWS with a dedicated mobile app and predictive modeling.</li>
+                        <li><strong>Community:</strong> Conduct annual city-wide flood response mock drills involving schools, hospitals, and community response teams.</li>
+                        <li><strong>Finance:</strong> Explore <a href="https://ppp.worldbank.org/public-private-partnership/" target="_blank" rel="noopener noreferrer" class="external-link">Public-Private Partnerships (PPPs)</a> for large-scale green infrastructure projects like bioswales along major roads.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-4">Phase 3: Full Integration & Resilience (Year 6-10)</h3>
+                    <ul class="list-disc list-inside space-y-3 text-slate-600">
+                        <li><strong>Infrastructure:</strong> Complete augmentation of 80% of the primary stormwater drain network. Achieve a 15% increase in urban green cover and permeable surfaces.</li>
+                        <li><strong>Technology:</strong> Operate a fully integrated, AI-powered EWS <a href="https://www.nasa.gov/centers-and-facilities/glenn/digital-twin/" target="_blank" rel="noopener noreferrer" class="external-link">"digital twin"</a> of the city for hyper-local (street-level) flood forecasting.</li>
+                        <li><strong>Resilience:</strong> Ensure all critical infrastructure (hospitals, power grids, communication hubs) is retrofitted for flood resilience.</li>
+                        <li><strong>Finance:</strong> Establish a sustainable, long-term "Climate Resilience Fund" from dedicated municipal taxes and <a href="https://www.worldbank.org/en/topic/climatechange/brief/what-are-green-bonds" target="_blank" rel="noopener noreferrer" class="external-link">green bonds</a> for maintenance and continuous improvement.</li>
+                        <li><strong>Review:</strong> Institute a bi-annual review process to update the IUFM model based on new data, completed projects, and evolving climate projections.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-800 text-white mt-24">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>&copy; 2024 IUFM Model Initiative. A framework for building resilient cities.</p>
+        </div>
+    </footer>
+
+    <!-- Mitigation Options Modal -->
+    <div id="mitigation-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="modal-backdrop absolute inset-0"></div>
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-4 modal-content transform scale-95 relative">
+            <h3 class="text-2xl font-bold mb-6 text-center">Choose Mitigation Strategy</h3>
+            <div id="mitigation-options-container" class="space-y-4">
+                <!-- JS will populate this -->
+            </div>
+            <button id="cancel-mitigation-btn" class="w-full mt-6 bg-slate-200 text-slate-800 font-bold py-3 px-4 rounded-lg hover:bg-slate-300 transition-colors">Cancel</button>
+        </div>
+    </div>
+
+
+    <script>
+        // --- Mobile Menu Toggle ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // --- Enhanced Interactive Map Simulation ---
+        const mapContainer = document.getElementById('map-container');
+        const simulateBtn = document.getElementById('simulate-flood-btn');
+        const resetBtn = document.getElementById('reset-map-btn');
+        const floodRiskStat = document.getElementById('flood-risk-stat');
+        const mitigationCostStat = document.getElementById('mitigation-cost-stat');
+        const mitigatedCellsStat = document.getElementById('mitigated-cells-stat');
+        const damageCostStat = document.getElementById('damage-cost-stat');
+        const legendContainer = document.getElementById('legend');
+        const modal = document.getElementById('mitigation-modal');
+        const modalBackdrop = modal.querySelector('.modal-backdrop');
+        const modalContent = modal.querySelector('.modal-content');
+        const modalOptionsContainer = document.getElementById('mitigation-options-container');
+        const cancelMitigationBtn = document.getElementById('cancel-mitigation-btn');
+        
+        const gridSize = 10;
+        let mapData = [];
+        let totalCost = 0;
+        let selectedCellId = null;
+
+        // --- Cell and Mitigation Definitions ---
+        const cellTypes = {
+            DEFAULT: { name: 'Undeveloped Land', color: '#a3be8c', vulnerability: 2, damageCost: 1 },
+            RESIDENTIAL: { name: 'Residential Zone', color: '#e5e7eb', vulnerability: 5, damageCost: 5 },
+            COMMERCIAL: { name: 'Commercial Hub', color: '#94a3b8', vulnerability: 7, damageCost: 10 },
+            CRITICAL: { name: 'Critical Infra', color: '#ef4444', vulnerability: 10, damageCost: 20 },
+            RIVER: { name: 'River', color: '#60a5fa', vulnerability: 0, damageCost: 0, isWater: true },
+        };
+
+        const mitigationTypes = {
+            PARK: { name: 'Develop Park', color: '#22c55e', cost: 5, vulnerability: 1, mitigation: 4, description: "Absorbs water, reducing local flood risk." },
+            PERMEABLE: { name: 'Permeable Pavement', color: '#f59e0b', cost: 3, vulnerability: 3, mitigation: 2, description: "Allows water to seep through, reducing runoff." },
+            FLOODWALL: { name: 'Build Flood Wall', color: '#4b5563', cost: 8, vulnerability: 2, mitigation: 0, blocksFlood: true, description: "Blocks floodwater from adjacent cells." }
+        };
+
+        // --- Map Initialization and Rendering ---
+        function initializeMap() {
+            mapData = [];
+            totalCost = 0;
+            for (let i = 0; i < gridSize * gridSize; i++) {
+                const x = i % gridSize;
+                const y = Math.floor(i / gridSize);
+                let type = cellTypes.RESIDENTIAL;
+
+                if (x === 4) type = cellTypes.RIVER;
+                if (x > 6 && y > 6) type = cellTypes.COMMERCIAL;
+                if (x === 1 && y === 1) type = cellTypes.CRITICAL;
+                if (x < 2 && y > 5) type = cellTypes.DEFAULT;
+                
+                mapData.push({
+                    id: i,
+                    baseType: type,
+                    currentType: type,
+                    mitigation: null,
+                    isFlooded: false
+                });
+            }
+            renderMap();
+            updateStats();
+        }
+
+        function renderMap() {
+            mapContainer.innerHTML = '';
+            mapData.forEach(cellData => {
+                const cellEl = document.createElement('div');
+                cellEl.classList.add('map-grid-cell', 'w-full', 'h-full', 'cursor-pointer', 'rounded');
+                
+                let color = cellData.mitigation ? cellData.mitigation.color : cellData.currentType.color;
+                if (cellData.isFlooded) {
+                    color = '#be185d'; // Flooded color
+                }
+                cellEl.style.backgroundColor = color;
+
+                if (cellData.mitigation && cellData.mitigation.blocksFlood) {
+                    cellEl.style.border = '2px solid #1f2937';
+                }
+                
+                cellEl.dataset.id = cellData.id;
+                let title = cellData.mitigation ? cellData.mitigation.name : cellData.currentType.name;
+                cellEl.setAttribute('title', title);
+                
+                if (!cellData.currentType.isWater) {
+                    cellEl.addEventListener('click', handleCellClick);
+                }
+                mapContainer.appendChild(cellEl);
+            });
+        }
+        
+        function renderLegend() {
+            legendContainer.innerHTML = '';
+            const typesToDisplay = [
+                ...Object.values(cellTypes),
+                ...Object.values(mitigationTypes),
+                { name: 'Flooded Area', color: '#be185d' }
+            ];
+
+            typesToDisplay.forEach(type => {
+                const item = document.createElement('div');
+                item.classList.add('legend-item');
+                item.innerHTML = `<div class="legend-color" style="background-color: ${type.color};"></div><span>${type.name}</span>`;
+                legendContainer.appendChild(item);
+            });
+        }
+
+        // --- Event Handlers ---
+        function handleCellClick(e) {
+            selectedCellId = parseInt(e.target.dataset.id);
+            const cell = mapData[selectedCellId];
+            if (cell.mitigation) return; // Already mitigated
+            openMitigationModal();
+        }
+
+        simulateBtn.addEventListener('click', () => {
+            // 1. Clear previous flood state
+            let totalDamage = 0;
+            mapData.forEach(cell => cell.isFlooded = false);
+
+            // 2. Identify initial flood sources (cells next to the river)
+            let floodQueue = [];
+            mapData.forEach(cell => {
+                if (cell.currentType.isWater) {
+                    getNeighbors(cell.id).forEach(nId => {
+                        if (!mapData[nId].currentType.isWater) {
+                            floodQueue.push(nId);
+                        }
+                    });
+                }
+            });
+            
+            // 3. Spread the flood using a breadth-first search approach
+            const floodedSet = new Set(floodQueue);
+            while (floodQueue.length > 0) {
+                const currentId = floodQueue.shift();
+                const currentCell = mapData[currentId];
+                
+                if(currentCell.isFlooded) continue;
+
+                // Simplified check: if this cell is next to a wall, it has a chance to be protected.
+                let wallProtection = false;
+                getNeighbors(currentId).forEach(nId => {
+                    if(mapData[nId].mitigation?.blocksFlood) {
+                        wallProtection = true;
+                    }
+                });
+                if(wallProtection && Math.random() > 0.2) continue; // 80% chance wall protects it
+
+
+                // Chance to flood is based on vulnerability minus mitigation
+                const floodChance = currentCell.currentType.vulnerability - (currentCell.mitigation?.mitigation || 0);
+                if (Math.random() * 10 < floodChance) {
+                    currentCell.isFlooded = true;
+                    totalDamage += currentCell.currentType.damageCost;
+                    
+                    // Add its neighbors to the queue to potentially flood them next
+                    getNeighbors(currentId).forEach(nId => {
+                        if (!mapData[nId].currentType.isWater && !floodedSet.has(nId)) {
+                            floodQueue.push(nId);
+                            floodedSet.add(nId);
+                        }
+                    });
+                }
+            }
+
+            damageCostStat.textContent = `$${totalDamage}M`;
+            renderMap();
+        });
+
+        resetBtn.addEventListener('click', () => {
+            initializeMap();
+            renderLegend();
+        });
+
+        // --- Modal Logic ---
+        function openMitigationModal() {
+            modalOptionsContainer.innerHTML = '';
+            Object.values(mitigationTypes).forEach(mitigation => {
+                const optionEl = document.createElement('button');
+                optionEl.classList.add('w-full', 'text-left', 'p-4', 'rounded-lg', 'border-2', 'hover:border-blue-500', 'transition-all', 'bg-slate-50');
+                optionEl.innerHTML = `
+                    <div class="font-bold text-lg">${mitigation.name} - $${mitigation.cost}M</div>
+                    <div class="text-sm text-slate-600">${mitigation.description}</div>
+                `;
+                optionEl.onclick = () => applyMitigation(mitigation);
+                modalOptionsContainer.appendChild(optionEl);
+            });
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modalBackdrop.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeMitigationModal() {
+            modalBackdrop.classList.add('opacity-0');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        function applyMitigation(mitigation) {
+            const cell = mapData[selectedCellId];
+            if (!cell || cell.mitigation) return;
+
+            cell.mitigation = mitigation;
+            totalCost += mitigation.cost;
+            
+            closeMitigationModal();
+            renderMap();
+            updateStats();
+        }
+
+        cancelMitigationBtn.addEventListener('click', closeMitigationModal);
+        modalBackdrop.addEventListener('click', closeMitigationModal);
+
+        // --- Stats and Helpers ---
+        function updateStats() {
+            let totalVulnerability = 0;
+            let mitigatedCount = 0;
+            mapData.forEach(cell => {
+                if (!cell.currentType.isWater) {
+                    totalVulnerability += cell.mitigation ? cell.mitigation.vulnerability : cell.currentType.vulnerability;
+                }
+                if (cell.mitigation) {
+                    mitigatedCount++;
+                }
+            });
+            
+            floodRiskStat.textContent = `${totalVulnerability}`;
+            mitigationCostStat.textContent = `$${totalCost}M`;
+            mitigatedCellsStat.textContent = `${mitigatedCount} / ${gridSize*gridSize}`;
+            damageCostStat.textContent = '$0M';
+        }
+
+        function getNeighbors(id) {
+            const neighbors = [];
+            const x = id % gridSize;
+            const y = Math.floor(id / gridSize);
+            if (x > 0) neighbors.push(id - 1);
+            if (x < gridSize - 1) neighbors.push(id + 1);
+            if (y > 0) neighbors.push(id - gridSize);
+            if (y < gridSize - 1) neighbors.push(id + gridSize);
+            return neighbors;
+        }
+
+        // --- Initial Setup ---
+        window.onload = () => {
+            initializeMap();
+            renderLegend();
+            // Prepare modal for transitions
+            if (modal) {
+                modalBackdrop.classList.add('opacity-0');
+                modalContent.classList.add('scale-95');
+            }
+        };
+    </script>
+</body>
+</html>
